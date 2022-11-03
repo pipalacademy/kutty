@@ -32,8 +32,8 @@ class HTMLElement(Element):
             self.TAG = _tag
 
     def add(self, content):
-        if isinstance(content, str):
-            content = Text(content)
+        if not isinstance(content, Element):
+            content = Text(str(content))
         self.children.append(content)
 
     def render(self):
