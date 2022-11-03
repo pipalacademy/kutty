@@ -6,7 +6,7 @@ import pytest
 def read_test_files():
     tests = []
     p = Path(__file__).parent
-    files = p.rglob('*.yml')
+    files = p.rglob('**/*.yml')
     for f in files:
         tests.extend(list(yaml.safe_load_all(f.open())))
     return tests
@@ -22,7 +22,8 @@ def test_code(testspec):
 
     from patterns import html
     from patterns.site import Site, Page
-    env = {"html": html, "Site": Site, "Page": Page}
+    env = {}
+    exec("from patterns import *", env)
     if code.count("\n") > 0:
         exec(code, env)
         html = env["html"]

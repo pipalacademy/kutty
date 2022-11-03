@@ -1,1 +1,3 @@
-from patterns.site import Page, Site
+from . import html
+from .site import Page, Site
+from .components.table import Table

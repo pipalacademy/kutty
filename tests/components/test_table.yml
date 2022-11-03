@@ -1,0 +1,27 @@
+name: test table
+code: |
+  table = Table(columns=["Name", "Price", "Quantity", "Amount"])
+  table.add_row(["Apple", 10, 5, 50])
+  table.add_row(["Banana", 2, 3, 6])
+  html = table.render()
+html: |
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Amount</th>
+    </tr>
+    <tr>
+      <td>Apple</td>
+      <td>10</td>
+      <td>5</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <td>Banana</td>
+      <td>2</td>
+      <td>3</td>
+      <td>6</td>
+    </tr>
+  </table>
