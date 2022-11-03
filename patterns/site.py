@@ -1,4 +1,5 @@
 from . import html
+from .components.navbar import Navbar
 
 
 BOOTSTRAP_CSS = "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
@@ -12,6 +13,8 @@ class Site(html.Element):
         self.javascripts = []
 
         self.add_stylesheet(BOOTSTRAP_CSS)
+
+        self.navbar = Navbar(self.title)
 
     def add_stylesheet(self, link):
         self.stylesheets.append(link)
@@ -27,8 +30,11 @@ class Site(html.Element):
         for link in self.stylesheets:
             doc.head.add(html.link(rel="stylesheet", href=link))
 
+        doc.body.add(self.navbar)
+        container = html.div(class_="container")
+        doc.body.add(container)
         if content:
-            doc.body.add(content)
+            container.add(content)
 
         for link in self.javascripts:
             doc.body.add(html.script(src=link))

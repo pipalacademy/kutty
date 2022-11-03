@@ -67,10 +67,14 @@ def tag(name, *children, **kwargs):
 
 div = make_element("div")
 p = make_element("p")
+nav = make_element("nav")
+ul = make_element("ul")
+li = make_element("li")
 
 br = make_element("br", kind="void")
 img = make_element("img", kind="void")
 a = make_element("a")
+button = make_element("button")
 
 span = make_element("span")
 strong = make_element("strong")

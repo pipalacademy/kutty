@@ -1,0 +1,29 @@
+name: test navbar
+code: |
+  nav = Navbar(title="FooBar")
+  nav.add_link("foo", url="/foo")
+  nav.add_link("bar", url="/bar")
+  nav.add_link("baz", url="/baz", right=True)
+  html = nav.render()
+html: |
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="/">FooBar</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-content">
+        <span class="navbar-toggler-icon" />
+      </button>
+      <div class="collapse navbar-collapse" id="navbar-content">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/foo">foo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/bar">bar</a>
+          </li>
+        </ul>
+        <div class="d-flex">
+          <a class="nav-link" href="/baz">baz</a>
+        </div>
+      </div>
+    </div>
+  </nav>
