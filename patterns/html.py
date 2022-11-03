@@ -11,40 +11,45 @@ class Text:
 
 class Element:
     def __init__(self, content=None, **attrs):
-        self.content = self.make_content(content)
+        self.children = []
         self.attrs = attrs
+        if content is not None:
+            self.add(content)
 
-    def make_content(self, content):
-        if isinstance(content, (Element, Text)):
-            return content
-        elif isinstance(content, str):
-            return Text(content)
-        elif content is None:
-            return Text("")
+    def add(self, content):
+        if isinstance(content, str):
+            content = Text(content)
+        self.children.append(content)
 
     def render(self):
         attrs = "".join(" " + self._render_attr(name, value) for name, value in self.attrs.items())
-        return f"<{self.TAG}{attrs}>{self.content.render()}</{self.TAG}>"
+        if self.children:
+            content = "".join(c.render() for c in self.children)
+            return f"<{self.TAG}{attrs}>{content}</{self.TAG}>"
+        else:
+            return f"<{self.TAG}{attrs} />"
 
     def _render_attr(self, name, value):
         name = name.replace("_", "-").strip("-")
         value = escape(value)
         return f'{name}="{value}"'
 
-class Div(Element):
-    TAG = "div"
+def make_element(tag):
+    class Node(Element):
+        TAG = tag
 
-class P(Element):
-    TAG = "p"
+    Node.__name__ = tag
+    return Node
 
-class Span(Element):
-    TAG = "span"
 
-class Strong(Element):
-    TAG = "strong"
+div = make_element("div")
+p = make_element("p")
 
-class Em(Element):
-    TAG = "em"
+br = make_element("br")
+img = make_element("img")
+a = make_element("a")
 
-class A(Element):
-    TAG = "a"
+span = make_element("span")
+strong = make_element("strong")
+em = make_element("em")
+

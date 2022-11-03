@@ -19,8 +19,8 @@ def test_code(testspec):
     code = testspec['code']
     expected_html = testspec['html']
 
-    env = {}
-    exec("from patterns import *", env)
+    from patterns import html
+    env = {"html": html}
     element = eval(code, env)
     html = element.render()
 

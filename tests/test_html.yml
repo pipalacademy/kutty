@@ -1,23 +1,29 @@
 name: test div
 code: |
-  Div("hello")
+  html.div("hello")
 html: |
   <div>hello</div>
 ---
 name: test div with id
 code: |
-  Div("hello", id="foo")
+  html.div("hello", id="foo")
 html: |
   <div id="foo">hello</div>
 ---
 name: test div with class
 code: |
-  Div("hello", class_="alert")
+  html.div("hello", class_="alert")
 html: |
   <div class="alert">hello</div>
 ---
 name: test a
 code: |
-  A("Google", href="https://google.com/")
+  html.a("Google", href="https://google.com/")
 html: |
   <a href="https://google.com/">Google</a>
+---
+name: test img
+code: |
+  html.img(src="logo.png", alt="Logo")
+html: |
+  <img src="logo.png" alt="Logo" />
