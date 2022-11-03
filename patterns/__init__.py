@@ -1,1 +1,1 @@
-from patterns.site import Site
+from patterns.site import Page, Site

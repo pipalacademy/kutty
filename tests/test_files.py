@@ -21,8 +21,8 @@ def test_code(testspec):
     expected_html = testspec['html']
 
     from patterns import html
-    from patterns.site import Site
-    env = {"html": html, "Site": Site}
+    from patterns.site import Site, Page
+    env = {"html": html, "Site": Site, "Page": Page}
     if code.count("\n") > 0:
         exec(code, env)
         html = env["html"]

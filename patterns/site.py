@@ -19,7 +19,7 @@ class Site(html.Element):
     def add_javascript(self, link):
         self.javascripts.append(link)
 
-    def render(self):
+    def render(self, content=None):
         doc = html.Document()
 
         doc.head.add(html.title(self.title))
@@ -27,7 +27,29 @@ class Site(html.Element):
         for link in self.stylesheets:
             doc.head.add(html.link(rel="stylesheet", href=link))
 
+        if content:
+            doc.body.add(content)
+
         for link in self.javascripts:
             doc.body.add(html.script(src=link))
 
         return doc.render()
+
+    def new_page(self, title):
+        return Page(site=self, title=title)
+
+class Page(html.Element):
+
+    def __init__(self, site, title):
+        self.site = site
+        self.title = title
+        self.content = html.div(class_="page")
+
+        if self.title:
+            self.add(html.h1(title))
+
+    def add(self, element):
+        self.content.add(element)
+
+    def render(self):
+        return self.site.render(content=self.content)

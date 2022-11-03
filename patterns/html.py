@@ -66,6 +66,7 @@ a = make_element("a")
 span = make_element("span")
 strong = make_element("strong")
 em = make_element("em")
+h1 = make_element("h1")
 
 html = make_element("html")
 head = make_element("head")
