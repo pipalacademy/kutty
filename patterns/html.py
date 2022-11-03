@@ -72,5 +72,22 @@ head = make_element("head")
 body = make_element("body")
 meta = make_element("meta", kind="void")
 link = make_element("link", kind="void")
+title = make_element("title")
+script = make_element("script")
 
 input = make_element("input", kind="void")
+
+class Document(Element):
+    def __init__(self):
+        self.html = html()
+        self.head = head()
+        self.body = body()
+
+        self.head.add(meta(charset="utf-8"))
+        self.head.add(meta(name="viewport", content="width=device-width, initial-scale=1"))
+
+        self.html.add(self.head)
+        self.html.add(self.body)
+
+    def render(self):
+        return "<!DOCTYPE html>" + self.html.render()

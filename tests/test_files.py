@@ -1,3 +1,4 @@
+import re
 import yaml
 from pathlib import Path
 import pytest
@@ -16,12 +17,22 @@ test_ids = [t['name'] for t in testdata]
 
 @pytest.mark.parametrize('testspec', testdata, ids=test_ids)
 def test_code(testspec):
-    code = testspec['code']
+    code = testspec['code'].strip()
     expected_html = testspec['html']
 
     from patterns import html
-    env = {"html": html}
-    element = eval(code, env)
-    html = element.render()
+    from patterns.site import Site
+    env = {"html": html, "Site": Site}
+    if code.count("\n") > 0:
+        exec(code, env)
+        html = env["html"]
+    else:
+        element = eval(code, env)
+        html = element.render()
 
-    assert html.strip() == expected_html.strip()
+    assert html.strip() == despace(expected_html.strip())
+
+re_newline = re.compile(r"\n *", re.M)
+
+def despace(text):
+    return re_newline.sub("", text)
