@@ -2,14 +2,23 @@
 """
 from html import escape
 
-class Text:
+class Element:
+    """Base class for all elements in patterns.
+    """
+    def render(self) -> str:
+        """Renders the element."""
+        raise NotImplementedError()
+
+class Text(Element):
     def __init__(self, text):
         self.text = text
 
     def render(self):
         return self.text
 
-class Element:
+class HTMLElement(Element):
+    """Base class for all plain html elements.
+    """
     def __init__(self, content=None, **attrs):
         self.children = []
         self.attrs = attrs
@@ -35,7 +44,7 @@ class Element:
         return f'{name}="{value}"'
 
 def make_element(tag):
-    class Node(Element):
+    class Node(HTMLElement):
         TAG = tag
 
     Node.__name__ = tag
