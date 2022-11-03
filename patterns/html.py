@@ -21,11 +21,15 @@ class HTMLElement(Element):
     """
     KIND = "normal"
 
-    def __init__(self, _content=None, **attrs):
+    def __init__(self, _content=None, _tag=None, **attrs):
         self.children = []
         self.attrs = attrs
         if _content is not None:
             self.add(_content)
+
+        # special case to support arbitrary tags
+        if _tag:
+            self.TAG = _tag
 
     def add(self, content):
         if isinstance(content, str):
@@ -55,6 +59,11 @@ def make_element(tag, kind="normal"):
     Node.__name__ = tag
     return Node
 
+def tag(name, *children, **kwargs):
+    e = HTMLElement(_tag=name, **kwargs)
+    for child in children:
+        e.add(child)
+    return e
 
 div = make_element("div")
 p = make_element("p")
