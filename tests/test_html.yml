@@ -26,4 +26,4 @@ name: test img
 code: |
   html.img(src="logo.png", alt="Logo")
 html: |
-  <img src="logo.png" alt="Logo" />
+  <img src="logo.png" alt="Logo">

@@ -19,11 +19,13 @@ class Text(Element):
 class HTMLElement(Element):
     """Base class for all plain html elements.
     """
-    def __init__(self, content=None, **attrs):
+    KIND = "normal"
+
+    def __init__(self, _content=None, **attrs):
         self.children = []
         self.attrs = attrs
-        if content is not None:
-            self.add(content)
+        if _content is not None:
+            self.add(_content)
 
     def add(self, content):
         if isinstance(content, str):
@@ -32,7 +34,9 @@ class HTMLElement(Element):
 
     def render(self):
         attrs = "".join(" " + self._render_attr(name, value) for name, value in self.attrs.items())
-        if self.children:
+        if self.KIND == "void":
+            return f"<{self.TAG}{attrs}>"
+        elif self.children:
             content = "".join(c.render() for c in self.children)
             return f"<{self.TAG}{attrs}>{content}</{self.TAG}>"
         else:
@@ -43,9 +47,10 @@ class HTMLElement(Element):
         value = escape(value)
         return f'{name}="{value}"'
 
-def make_element(tag):
+def make_element(tag, kind="normal"):
     class Node(HTMLElement):
         TAG = tag
+        KIND = kind
 
     Node.__name__ = tag
     return Node
@@ -54,11 +59,18 @@ def make_element(tag):
 div = make_element("div")
 p = make_element("p")
 
-br = make_element("br")
-img = make_element("img")
+br = make_element("br", kind="void")
+img = make_element("img", kind="void")
 a = make_element("a")
 
 span = make_element("span")
 strong = make_element("strong")
 em = make_element("em")
 
+html = make_element("html")
+head = make_element("head")
+body = make_element("body")
+meta = make_element("meta", kind="void")
+link = make_element("link", kind="void")
+
+input = make_element("input", kind="void")
