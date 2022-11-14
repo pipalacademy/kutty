@@ -5,7 +5,7 @@ from .components.navbar import Navbar
 BOOTSTRAP_CSS = "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
 
 
-class Site(html.Element):
+class Layout(html.Element):
     def __init__(self, title):
         self.title = title
 
@@ -42,12 +42,12 @@ class Site(html.Element):
         return doc.render()
 
     def new_page(self, title):
-        return Page(site=self, title=title)
+        return Page(layout=self, title=title)
 
 class Page(html.Element):
 
-    def __init__(self, site, title):
-        self.site = site
+    def __init__(self, layout, title):
+        self.layout = layout
         self.title = title
         self.content = html.div(class_="page")
 
@@ -58,4 +58,4 @@ class Page(html.Element):
         self.content.add(element)
 
     def render(self):
-        return self.site.render(content=self.content)
+        return self.layout.render(content=self.content)

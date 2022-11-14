@@ -1,4 +1,4 @@
 from . import html
-from .site import Page, Site
+from .layout import Page, Layout
 from .components.table import Table
 from .components.navbar import Navbar
