@@ -21,7 +21,6 @@ def test_code(testspec):
     expected_html = testspec['html']
 
     from patterns import html
-    from patterns.site import Site, Page
     env = {}
     exec("from patterns import *", env)
     if code.count("\n") > 0:
