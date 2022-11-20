@@ -31,6 +31,12 @@ class HTMLElement(Element):
         if _tag:
             self.TAG = _tag
 
+    def __repr__(self):
+        return f"<Tag:{self.TAG}>"
+
+    def __str__(self):
+        return self.render()
+
     def add(self, content):
         if not isinstance(content, Element):
             content = Text(str(content))
