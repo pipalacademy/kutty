@@ -9,6 +9,19 @@ class Element:
         """Renders the element."""
         raise NotImplementedError()
 
+    def __repr__(self):
+        return f"<{self.__class__.__name__}>"
+
+    def __str__(self):
+        return self.render()
+
+    # The << operator
+    def __lshift__(self, component):
+        return self.add(component)
+
+    def add(self, component):
+        raise Exception(f"Adding child elements is not supported for {self.__class__.__name__}")
+
 class Text(Element):
     def __init__(self, text):
         self.text = text
@@ -34,17 +47,13 @@ class HTMLElement(Element):
     def __repr__(self):
         return f"<Tag:{self.TAG}>"
 
-    def __str__(self):
-        return self.render()
-
     def add(self, content):
         if not isinstance(content, Element):
             content = Text(str(content))
         self.children.append(content)
 
-    # The << operator
-    def __lshift__(self, component):
-        return self.add(component)
+        # Result self to allow chaining of methods
+        return self
 
     def render(self):
         attrs = "".join(" " + self._render_attr(name, value) for name, value in self.attrs.items())
