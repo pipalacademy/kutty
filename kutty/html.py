@@ -36,6 +36,10 @@ class HTMLElement(Element):
             content = Text(str(content))
         self.children.append(content)
 
+    # The << operator
+    def __lshift__(self, component):
+        return self.add(component)
+
     def render(self):
         attrs = "".join(" " + self._render_attr(name, value) for name, value in self.attrs.items())
         if self.KIND == "void":

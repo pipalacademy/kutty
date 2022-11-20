@@ -40,3 +40,17 @@ html: |
     </head>
     <body />
   </html>
+---
+name: test << operator
+code: |
+  e = html.ul()
+  e << html.li("one")
+  e << html.li("two")
+  e << html.li("three")
+  result = e.render()
+html: |
+  <ul>
+    <li>one</li>
+    <li>two</li>
+    <li>three</li>
+  </ul>
