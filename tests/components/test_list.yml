@@ -1,0 +1,29 @@
+name: test list
+code: |
+  List(["one", "two", "three"])
+html: |
+  <ul>
+    <li>one</li>
+    <li>two</li>
+    <li>three</li>
+  </ul>
+---
+name: test nested list
+code: |
+    node = List([
+      html.strong("one"),
+      html.em("two"),
+      List(["A", "B", "C"])])
+    result = node.render()
+html: |
+  <ul>
+    <li><strong>one</strong></li>
+    <li><em>two</em></li>
+    <li>
+      <ul>
+          <li>A</li>
+          <li>B</li>
+          <li>C</li>
+      </ul>
+    </li>
+  </ul>
