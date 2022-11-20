@@ -29,7 +29,7 @@ name: test layout with javascripts
 code: |
   layout = Layout(title="hello")
   layout.add_javascript("/test/script.js")
-  html = layout.render()
+  result = layout.render()
 html: |
   <!DOCTYPE html>
   <html>
@@ -59,7 +59,7 @@ name: test page
 code: |
   layout = Layout(title="hello")
   page = layout.new_page("Hello world")
-  html = page.render()
+  result = page.render()
 html: |
   <!DOCTYPE html>
   <html>
@@ -93,7 +93,7 @@ code: |
   layout = Layout(title="hello")
   page = layout.new_page("Hello world")
   page.add("foo bar baz")
-  html = page.render()
+  result = page.render()
 html: |
   <!DOCTYPE html>
   <html>

@@ -3,7 +3,7 @@ code: |
   table = Table(columns=["Name", "Price", "Quantity", "Amount"])
   table.add_row(["Apple", 10, 5, 50])
   table.add_row(["Banana", 2, 3, 6])
-  html = table.render()
+  result = table.render()
 html: |
   <table class="table">
     <tr>

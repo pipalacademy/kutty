@@ -20,12 +20,11 @@ def test_code(testspec):
     code = testspec['code'].strip()
     expected_html = testspec['html']
 
-    from patterns import html
     env = {}
-    exec("from patterns import *", env)
+    exec("from kutty import *", env)
     if code.count("\n") > 0:
         exec(code, env)
-        html = env["html"]
+        html = env["result"]
     else:
         element = eval(code, env)
         html = element.render()
