@@ -29,6 +29,14 @@ class Text(Element):
     def render(self):
         return self.text
 
+class HTML(Element):
+    """Raw HTML"""
+    def __init__(self, html):
+        self.html = html
+
+    def render(self):
+        return self.html
+
 class HTMLElement(Element):
     """Base class for all plain html elements.
     """
@@ -86,6 +94,7 @@ def tag(name, *children, **kwargs):
 
 div = make_element("div")
 p = make_element("p")
+pre = make_element("pre")
 nav = make_element("nav")
 ul = make_element("ul")
 li = make_element("li")
@@ -99,6 +108,10 @@ span = make_element("span")
 strong = make_element("strong")
 em = make_element("em")
 h1 = make_element("h1")
+h2 = make_element("h2")
+h3 = make_element("h3")
+h4 = make_element("h4")
+h5 = make_element("h5")
 
 html = make_element("html")
 head = make_element("head")
