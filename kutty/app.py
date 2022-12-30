@@ -3,7 +3,7 @@
 
 from flask import Flask, abort
 from pathlib import Path
-from .layout import Layout
+from .layout import Layout, RawPage
 
 class Kutty(Flask):
     def __init__(self, path, title="Kutty"):
@@ -42,7 +42,11 @@ class Kutty(Flask):
             return abort(404)
 
         page = self.exec_path(py_path, 'page')
-        return self.layout.render_page(page)
+
+        if isinstance(page, RawPage):
+            return page.make_response()
+        else:
+            return self.layout.render_page(page)
 
 app = Kutty(".")
 
