@@ -1,3 +1,5 @@
+import kutty
+from kutty.app import app
 from kutty import Layout, Link, html
 from pathlib import Path
 
@@ -39,7 +41,8 @@ items += [Link(c.title(), href="/components/" + c) for c in components]
 
 sidebar << ListGroup(items)
 
-layout = DemoLayout("Kutty Demo")
+app.title = "Kutty Demo"
+app.layout = DemoLayout(app.title)
 
 style = """
 <style type="text/css">
@@ -69,4 +72,4 @@ style = """
 """
 
 # TODO: replace this with local css
-layout.add_stylesheet("https://pygments.org/_static/pygments.css")
+app.layout.add_stylesheet("https://pygments.org/_static/pygments.css")

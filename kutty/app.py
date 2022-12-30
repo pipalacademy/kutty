@@ -1,39 +1,37 @@
 """Kutty web app.
 """
 
-from re import A
 from flask import Flask, abort
 from pathlib import Path
-from . import Layout
+from .layout import Layout
 
 class Kutty(Flask):
     def __init__(self, path, title="Kutty"):
         super().__init__(__name__)
         self.path = path
         self.title = title
-        self.layout = self.get_layout()
+        self.layout = Layout(self.title)
 
         self.route("/")(self.render_path)
         self.route("/<path:path>")(self.render_path)
 
-    def get_layout(self):
-        path = self.get_path("_layout.py")
+    def init_app(self):
+        """Initialize the app using _app.py
+        """
+        path = self.get_path("_app.py")
         if path.exists():
-            layout = self.exec_path(path, "layout")
-        else:
-            layout = Layout(self.title)
-        return layout
+            self.exec_path(path)
 
     def get_path(self, filename, suffix=None):
         if suffix:
             filename = filename + suffix
         return Path(self.path) / filename
 
-    def exec_path(self, path, target_var):
-        code = path.read_text()
+    def exec_path(self, path, target_var=None):
         env = {}
-        exec(code, env)
-        return env[target_var]
+        exec(_compile_file(path), env)
+        if target_var:
+            return env[target_var]
 
     def render_path(self, path=""):
         if path == "" or path.endswith("/"):
@@ -46,18 +44,11 @@ class Kutty(Flask):
         page = self.exec_path(py_path, 'page')
         return self.layout.render_page(page)
 
-def parse_args():
-    import argparse
-    p = argparse.ArgumentParser()
-    p.add_argument("path", help="Path to pages to serve")
-    return p.parse_args()
+app = Kutty(".")
 
-def main():
-    import sys
-    args = parse_args()
-    sys.path.append(args.path)
-    app = Kutty(args.path)
-    app.run()
+cache = {}
+def _compile_file(path):
+    if path not in cache:
+        cache[path] = compile(path.read_text(), str(path), "exec")
+    return cache[path]
 
-if __name__ == "__main__":
-    main()
