@@ -1,10 +1,8 @@
 from flask import Flask
-from patterns import Layout, Table
-
+from kutty import Layout, Page, Table
 
 app = Flask(__name__)
-layout = Layout("Foo Table")
-
+layout = Layout("Table Demo")
 
 @app.route("/")
 def index():
@@ -12,7 +10,11 @@ def index():
     table.add_row(["Apple", 10, 5, 50])
     table.add_row(["Banana", 2, 3, 6])
 
-    page = layout.new_page("Table demo")
+    page = Page("Table demo")
     page.add(table)
 
-    return page.render()
+    return layout.render_page(page)
+
+if __name__ == "__main__":
+    app.run()
+

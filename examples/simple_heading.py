@@ -1,7 +1,5 @@
 from flask import Flask
-
-from patterns import Layout, Page
-
+from kutty import Layout, Page
 
 layout = Layout("FooBar")
 layout.navbar.add_link("foo", "/foo")
@@ -12,8 +10,8 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     # this sets the title, and an h1 tag automatically
-    page = layout.new_page("Hello world")
-    return page.render()
+    page = Page("Hello world")
+    return layout.render_page(page)
 
 if __name__ == "__main__":
     app.run()

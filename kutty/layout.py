@@ -41,13 +41,14 @@ class Layout(html.Element):
 
         return doc.render()
 
+    def render_page(self, page):
+        return self.render(page)
+
     def new_page(self, title):
         return Page(layout=self, title=title)
 
 class Page(html.Element):
-
-    def __init__(self, layout, title):
-        self.layout = layout
+    def __init__(self, title):
         self.title = title
         self.content = html.div(class_="page")
 
@@ -58,4 +59,4 @@ class Page(html.Element):
         self.content.add(element)
 
     def render(self):
-        return self.layout.render(content=self.content)
+        return self.content.render()
