@@ -1,0 +1,61 @@
+# name: test alert with link
+# code: |
+#   from kutty.bootstrap import Alert
+# 
+#   alert = Alert(dismissible=False)
+#   alert.add([
+#       "A simple primary alert with ",
+#       Link("an example link", href="/link"),
+#       ". Give it a click if you like."
+#   ])
+# html: |
+#   <div class="alert" role="alert">
+#     A simple primary alert with <a href="/link" class="alert-link">an example link</a>. Give it a click if you like.
+#   </div>
+# ---
+name: test simple alert
+code: |
+  from kutty.bootstrap import Alert
+
+  alert = Alert(dismissible=False)
+  alert.add("A simple alert.")
+
+  result = alert.render()
+html: |
+  <div class="alert" role="alert">
+    A simple alert.
+  </div>
+---
+name: test simple dismissible alert
+code: |
+  from kutty.bootstrap import Alert
+
+  alert = Alert()
+  alert.add("This is a dismissible alert.")
+
+  result = alert.render()
+html: |
+  <div class="alert alert-dismissible fade show" role="alert">
+    This is a dismissible alert.
+    <button type="button" class="close" data-dismiss="alert">
+      <span>&times;</span>
+    </button>
+  </div>
+---
+name: test simple dismissible alert with heading
+code: |
+  from kutty.bootstrap import Alert
+
+  alert = Alert()
+  alert.add_heading("Well done")
+  alert.add("You have solved the assignment successfully.")
+
+  result = alert.render()
+html: |
+  <div class="alert alert-dismissible fade show" role="alert">
+    <h4 class="alert-heading">Well done</h4>
+    You have solved the assignment successfully.
+    <button type="button" class="close" data-dismiss="alert">
+      <span>&times;</span>
+    </button>
+  </div>
