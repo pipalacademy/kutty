@@ -121,6 +121,7 @@ h2 = make_element("h2")
 h3 = make_element("h3")
 h4 = make_element("h4")
 h5 = make_element("h5")
+h6 = make_element("h6")
 
 html = make_element("html")
 head = make_element("head")
