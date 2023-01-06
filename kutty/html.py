@@ -63,6 +63,15 @@ class HTMLElement(Element):
         # Result self to allow chaining of methods
         return self
 
+    def add_class(self, class_):
+        classes = self.get_classes()
+        if class_ not in classes:
+            self.attrs["class_"] = " ".join(classes + [class_])
+        return self
+
+    def get_classes(self):
+        return self.attrs.get("class_", "").split()
+
     def render(self):
         attrs = "".join(" " + self._render_attr(name, value) for name, value in self.attrs.items())
         if self.KIND == "void":
