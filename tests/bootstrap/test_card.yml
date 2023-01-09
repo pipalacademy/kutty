@@ -1,0 +1,148 @@
+name: test simple card
+code: |
+  from kutty import Link
+  from kutty.bootstrap import SimpleCard
+
+  card = SimpleCard()
+  card.body.text << "Card text"
+  card.body.title << "Card title"
+  card.body.subtitle << "Card subtitle"
+  card.body << Link("foo", href="/foo")
+  card.footer << "Card footer"
+
+  result = card.render()
+html: |
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">
+        Card title
+      </h5>
+      <h6 class="card-subtitle text-muted">
+        Card subtitle
+      </h6>
+      <p class="card-text">
+        Card text
+      </p>
+      <a href="/foo" class="card-link">foo</a>
+    </div>
+    <div class="card-footer">
+      Card footer
+    </div>
+  </div>
+---
+name: test simple card with top image
+code: |
+  from kutty import Image, Link
+  from kutty.bootstrap import SimpleCard
+
+  card = SimpleCard()
+  card.top << Image("https://example.com/image.jpg")
+  card.body << Link("spam", href="/spam")
+
+  result = card.render()
+html: |
+  <div class="card">
+    <div><img src="https://example.com/image.jpg" class="card-img-top"></div>
+    <div class="card-body">
+      <a href="/spam" class="card-link">spam</a>
+    </div>
+  </div>
+---
+name: test simple card with title only
+code: |
+  from kutty.bootstrap import SimpleCard
+
+  card = SimpleCard(title="Hello world!")
+  result = card.render()
+html: |
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Hello world!</h5>
+    </div>
+  </div>
+---
+name: test simple card with subtitle only
+code: |
+  from kutty.bootstrap import SimpleCard
+
+  card = SimpleCard(subtitle="Something about foo")
+  result = card.render()
+html: |
+  <div class="card">
+    <div class="card-body">
+      <h6 class="card-subtitle">Something about foo</h6>
+    </div>
+  </div>
+---
+name: test card with list group
+code: |
+  from kutty import html as h
+  from kutty.bootstrap import Card
+
+  card = Card(
+    h.ul(class_="list-group list-group-flush")
+      .add(h.li(class_="list-group-item", _content="An item"))
+      .add(h.li(class_="list-group-item", _content="A second item"))
+      .add(h.li(class_="list-group-item", _content="A third item"))
+  )
+  result = card.render()
+html: |
+  <div class="card">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">An item</li>
+      <li class="list-group-item">A second item</li>
+      <li class="list-group-item">A third item</li>
+    </ul>
+  </div>
+---
+name: test card with list group, header and footer
+code: |
+  from kutty import html as h
+  from kutty.bootstrap import Card
+
+  card = Card()
+  card.add_header("Featured")
+  card.add(
+    h.ul(class_="list-group list-group-flush")
+      .add(h.li(class_="list-group-item", _content="An item"))
+      .add(h.li(class_="list-group-item", _content="A second item"))
+      .add(h.li(class_="list-group-item", _content="A third item"))
+  )
+  card.add_footer("Card footer")
+
+  result = card.render()
+html: |
+  <div class="card">
+    <div class="card-header">
+      Featured
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">An item</li>
+      <li class="list-group-item">A second item</li>
+      <li class="list-group-item">A third item</li>
+    </ul>
+    <div class="card-footer">
+      Card footer
+    </div>
+  </div>
+---
+name: test card with link in body
+code: |
+  from kutty import Link
+  from kutty.bootstrap import SimpleCard
+
+  card = SimpleCard(title="Card title", subtitle="Card subtitle", text="Card text")
+  card.body << Link("Card link", href="/foo")
+  card.body << Link("Another link", href="/bar")
+
+  result = card.render()
+html: |
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Card title</h5>
+      <h6 class="card-subtitle text-muted">Card subtitle</h6>
+      <p class="card-text">Card text</p>
+      <a href="/foo" class="card-link">Card link</a>
+      <a href="/bar" class="card-link">Another link</a>
+    </div>
+  </div>
