@@ -1,5 +1,5 @@
 from kutty import html
 
 
-class BootstrapElement(html.Element):
+class BootstrapElement(html.HTMLElement):
     pass
