@@ -54,3 +54,84 @@ html: |
     <li>two</li>
     <li>three</li>
   </ul>
+---
+name: test variadic elements
+code: |
+  d = html.div(
+    html.h1("Hello, world!"),
+    html.p("Hi there. Long text."),
+    html.p("Another long text."),
+  )
+  result = d.render()
+html: |
+  <div>
+    <h1>Hello, world!</h1>
+    <p>Hi there. Long text.</p>
+    <p>Another long text.</p>
+  </div>
+---
+name: test attrs as dict
+code: |
+  d = html.div(
+    {"class": "bg-dark text-light", "style": "padding: 18px;"},
+    "foo"
+  )
+  result = d.render()
+html: |
+  <div class="bg-dark text-light" style="padding: 18px;">
+    foo
+  </div>
+---
+name: test default CLASS
+code: |
+  class DarkMode(html.HTMLElement):
+    TAG = "div"
+    CLASS = "text-light bg-dark"
+
+  d = DarkMode(
+    html.p("Foo bar")
+  )
+  result = d.render()
+html: |
+  <div class="text-light bg-dark">
+    <p>Foo bar</p>
+  </div>
+---
+name: test class attribute addition from attrs dict
+code: |
+  class DarkMode(html.HTMLElement):
+    TAG = "div"
+    CLASS = "text-light bg-dark"
+
+  d = DarkMode({"class_": "foo"}, "baz")
+  result = d.render()
+html: |
+  <div class="text-light bg-dark foo">
+    baz
+  </div>
+---
+name: test class attribute addition from kwargs
+code: |
+  class DarkMode(html.HTMLElement):
+    TAG = "div"
+    CLASS = "text-light bg-dark"
+
+  d = DarkMode("baz", class_="bar")
+  result = d.render()
+html: |
+  <div class="text-light bg-dark bar">
+    baz
+  </div>
+---
+name: test class attribute precedence
+code: |
+  class DarkMode(html.HTMLElement):
+    TAG = "div"
+    CLASS = "text-light bg-dark"
+
+  d = DarkMode({"class_": "foo"}, "baz", class_="bar")
+  result = d.render()
+html: |
+  <div class="text-light bg-dark bar">
+    baz
+  </div>
