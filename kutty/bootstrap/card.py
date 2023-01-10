@@ -1,51 +1,79 @@
 """Bootstrap Card component.
 
-There is a `Card` low-level component that doesn't have anything by itself but
-needs to be populated by hand with `.add_body()`, `.add_header()`,
-`.add_footer()`, in addition to `.add()`.
+There is a `Card` component that starts with a blank card and has a
+`card.header`, `card.body` and `card.footer` that can be populated. They
+are `Optional`s, meaning that they will be rendered only if they have
+some content. This module also exposes constructors for components of
+a Card, such as `CardHeader`, `CardBody`, and `CardFooter`.
 
-This module also exposes the higher-level components built on top of `Card`.
-It is recommended to use them directly.
-Higher-level components: `SimpleCard`
+The complete list of those components is:
+- `CardHeader`
+- `CardBody`
+- `CardFooter`
+- `CardTitle`
+- `CardSubtitle`
+- `CardText`
+- `CardLink`
+- `CardImageTop`
+- `CardImageBottom`
+
+They can be combined together as normal Kutty elements to make complex
+elements in a composable manner.
+
+It also takes some keyword arguments during initialization for simple
+use cases.
 
 Example usage:
 
 ```python
-from kutty.bootstrap import SimpleCard
+from kutty.bootstrap import Card
 
-card = SimpleCard(
+card = Card(
     title="Foo", subtitle="More about foo", text="Foo is spam, ham and eggs."
 )
-card.body << Link("Go somewhere", href="#")
+card.body.add_link("Go somewhere", "#")
 ```
 
-Header and footer elements are automatically added, and can be populated with
-`<<` or with text during initialization.
+Header and footer content can also be set during initialization, and are always
+created as `Optional` containers. `card.header`, `card.footer`, and `card.body`
+can be added to normally with `<<` operator or `.add()` method.
 
 ```python
-from kutty.bootstrap import SimpleCard
+from kutty.bootstrap import Card
 
 # either like this:
-card = SimpleCard(header="Featured")
+card = Card(header="Featured")
 
-# or like this:
-card = SimpleCard()
+# or like this, both are equivalent:
+card = Card()
 card.header << "Featured"
 ```
 
-Footer can be accessed analogously with `.footer`.
-
-Content can be added to the "top" and "bottom" of the card by adding to
-`card.top` and `card.bottom`. `card.top` is (by default) a `div` between
-the header and body, and `card.bottom` is (by default) a `div` between
-the body and footer.
+`footer` and `body` can be accessed similarly. Note that `CardBody` doesn't
+have similar attributes. Title and subtitle cannot be set as attributes,
+but should be done either with keyword arguments or with the `.add_title()`,
+`.add_subtitle()` and `.add_text()` methods.
 
 ```python
-from kutty import Image
-from kutty.bootstrap import SimpleCard
+from kutty.boostrap import Card
 
-card = SimpleCard()
-card.top << Image("https://example.com/image.jpeg")
+# this:
+card = Card(title="Foo", text="Bar and baz.")
+
+# is the same as:
+card = Card()
+card.body.add_title("Foo")
+card.body.add_text("Bar and baz.")
+```
+
+There is also an `.add_link()` method like this that creates links with styles
+that match with Bootstrap cards.
+
+```python
+from kutty.bootstrap import Card
+
+card = Card()
+card.body.add_link("foo", "/foo")
 ```
 
 Additionally, any image added to `card.top` will be injected with the class
@@ -70,202 +98,155 @@ card = Card(
       .add(h.li(class_="list-group-item", _content="A third item"))
 )
 ```
+
+## Advanced usage
+
+The components exposed by this module make it allow building complex cards
+and retain the structure of the contents in the code.
+
+```python
+Card(
+    CardHeader("Featured"),
+    CardImageTop("/foo.jpeg", alt="Picture of Foo"),
+    CardBody(
+        CardTitle("Foo"),
+        CardSubtitle("More about foo"),
+        CardText("Foo is about spam, different from ham, and relates to eggs.")
+    ),
+)
+```
 """
 
-from kutty import html, Link
+from kutty import html, Optional
 from .base import BootstrapElement
 
 
 class Card(BootstrapElement):
     TAG = "div"
+    CLASS = "card"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(
+            self,
+            *args,
+            header=None,
+            top_image=None,
+            title=None, subtitle=None, text=None,
+            footer=None,
+            **kwargs):
         super().__init__(*args, **kwargs)
-        self.add_class("card")
+
+        self.header = Optional(CardHeader(header))
+        self.top_image = CardImageTop(top_image)
+        self.body = Optional(
+            CardBody(
+                **self._make_body_kwargs(
+                    title=title, subtitle=subtitle, text=text
+                )
+            )
+        )
+        self.footer = Optional(CardFooter(footer))
+
+        self.add(self.header)
+        self.add(self.body)
+        self.add(self.footer)
+
+    def _make_body_kwargs(self, **kwargs):
+        return {key: item for key, item in kwargs.items() if item is not None}
 
     def add_header(self, *args, **kwargs):
-        element = Header(*args, **kwargs)
+        element = CardHeader(*args, **kwargs)
         self.add(element)
         return element
 
     def add_body(self, *args, **kwargs):
-        element = Body(*args, **kwargs)
+        element = CardBody(*args, **kwargs)
         self.add(element)
         return element
 
     def add_footer(self, *args, **kwargs):
-        element = Footer(*args, **kwargs)
+        element = CardFooter(*args, **kwargs)
         self.add(element)
         return element
 
-class Header(BootstrapElement):
+    def add_top_image(self, *args, **kwargs):
+        element = CardImageTop(*args, **kwargs)
+        self.add(element)
+        return element
+
+    def add_bottom_image(self, *args, **kwargs):
+        element = CardImageBottom(*args, **kwargs)
+        self.add(element)
+        return element
+
+class CardHeader(BootstrapElement):
     TAG = "div"
+    CLASS = "card-header"
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.add_class("card-header")
-
-class Body(BootstrapElement):
+class CardBody(BootstrapElement):
     TAG = "div"
+    CLASS = "card-body"
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.add_class("card-body")
-
-    def add_title(self, content):
-        if is_heading_element(content):
-            element = content
-        else:
-            element = html.h5(content)
-        element.add_class("card-title")
-        super().add(element)
-        return element
-
-    def add_subtitle(self, content):
-        if is_heading_element(content):
-            element = content
-        else:
-            element = html.h6(content)
-        element.add_class("card-subtitle text-muted")
-        super().add(element)
-        return element
-
-    def add_text(self, content):
-        if is_paragraph_element(content):
-            element = content
-        else:
-            element = html.p(content)
-        element.add_class("card-text")
-        super().add(element)
-        return element
-
-    def add_link(self, content):
-        if is_link_element(content):
-            element = content
-        else:
-            element = Link(content)
-        element.add_class("card-link")
-        super().add(element)
-        return element
-
-class Footer(BootstrapElement):
-    TAG = "div"
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.add_class("card-footer")
-
-class DefaultElement(html.HTMLElement):
-    def __init__(
-            self, *args,
-            empty_condition=lambda self: not self.children, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.empty_condition = empty_condition
-
-    def render(self):
-        if self.empty_condition(self):
-            return ""
-        else:
-            return super().render()
-
-class SimpleBody(Body):
     def __init__(self, *args, title=None, subtitle=None, text=None, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.title = self.add_title(title)
-        self.subtitle = self.add_subtitle(subtitle)
-        self.text = self.add_text(text)
+        if title:
+            self.add_title(title)
+        if subtitle:
+            self.add_subtitle(subtitle)
+        if text:
+            self.add_text(text)
 
-    def add_title(self, title=None):
-        if is_heading_element(title) or is_text(title):
-            element = super().add_title(title)
-        else:
-            element = DefaultElement(_tag="h5", class_="card-title")
-            self.add(element)
-            if title is not None:
-                element << title
+    def add_title(self, content):
+        element = CardTitle(content)
+        self.add(element)
         return element
 
-    def add_subtitle(self, subtitle=None):
-        if is_heading_element(subtitle) or is_text(subtitle):
-            element = super().add_subtitle(subtitle)
-        else:
-            element = DefaultElement(_tag="h6", class_="card-subtitle text-muted")
-            self.add(element)
-            if subtitle is not None:
-                element << subtitle
+    def add_subtitle(self, content):
+        element = CardSubtitle(content)
+        self.add(element)
         return element
 
-    def add_text(self, text=None):
-        if is_paragraph_element(text) or is_text(text):
-            element = super().add_text(text)
-        else:
-            element = DefaultElement(_tag="p", class_="card-text")
-            self.add(element)
-            if text is not None:
-                element << text
+    def add_text(self, content):
+        element = CardText(content)
+        self.add(element)
         return element
 
-    def add(self, element):
-        if is_link_element(element):
-            super().add_link(element)
-            return self  # add should return self
-        else:
-            return super().add(element)
+    def add_link(self, title, href):
+        element = CardLink(title, href=href)
+        self.add(element)
+        return element
 
-class Top(BootstrapElement):
+class CardTitle(BootstrapElement):
+    TAG = "h5"
+    CLASS = "card-title"
+
+class CardSubtitle(BootstrapElement):
+    TAG = "h6"
+    CLASS = "card-subtitle text-muted"
+
+class CardText(BootstrapElement):
+    TAG = "p"
+    CLASS = "card-text"
+
+class CardLink(BootstrapElement):
+    TAG = "a"
+    CLASS = "card-link"
+
+class CardFooter(BootstrapElement):
     TAG = "div"
+    CLASS = "card-footer"
 
-    def add(self, element):
-        if is_image_element(element):
-            element.add_class("card-img-top")
-        return super().add(element)
+class ImageElement(BootstrapElement):
+    TAG = "img"
 
-class Bottom(BootstrapElement):
-    TAG = "div"
+    def __init__(self, src, *args, **kwargs):
+        super().__init__(*args, src=src, **kwargs)
 
-    def add(self, element):
-        if is_image_element(element):
-            element.add_class("card-img-bottom")
-        return super().add(element)
+class CardImageTop(ImageElement):
+    CLASS = "card-img-top"
 
-class SimpleCard(Card):
-    def __init__(
-            self,
-            *args,
-            header=None, top=None,
-            body=None,
-            bottom=None, footer=None,
-            title=None, subtitle=None, text=None,
-            **kwargs):
-        super().__init__(*args, **kwargs)
-        self.header = Header(header)
-        self.top = Top(top)
-        self.body = SimpleBody(body) if body else \
-            SimpleBody(title=title, subtitle=subtitle, text=text) if title or subtitle or text else \
-            SimpleBody()
-        self.bottom = Bottom(bottom)
-        self.footer = Footer(footer)
-
-    def get_children(self):
-        elements = [self.header, self.top, self.body, self.bottom,
-                    *self.children, self.footer]
-        for element in elements:
-            if not self._is_empty_component(element):
-                yield element
-
-    def render(self):
-        attrs = "".join(" " + self._render_attr(name, value) for name, value in self.attrs.items())
-        children = self.get_children()
-        content = "".join(c.render() for c in children)
-        return f"<{self.TAG}{attrs}>{content}</{self.TAG}>"
-
-    def _is_empty_component(self, thing):
-        components = {self.header, self.top, self.body,
-                      self.bottom, self.footer}
-        return thing in components \
-            and isinstance(thing, html.HTMLElement) \
-            and not thing.children
+class CardImageBottom(ImageElement):
+    CLASS = "card-img-bottom"
 
 def is_heading_element(thing):
     return isinstance(thing, html.HTMLElement) and \
