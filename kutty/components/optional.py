@@ -25,31 +25,39 @@ This will output:
 
 Notice that there is only one child div element, which has some content.
 
-## Empty Condition
+## Render Condition
 
-The empty condition used for Optional is whether or not `element.children`
-is an empty list.
+`Optional`'s constructor takes a second argument as the render condition.
+This is a function that takes the element and returns a boolean telling
+if the element should be rendered.
 
-This doesn't generalise well for few cases:
-    - For a void element, where there is supposed to be no closing tag.
-    For example an <img> element or a <hr> or <br>.
-    - For empty elements that are there to provide visual effect (such
-    as extra padding between two other elements).
-    - For nested optionals where self.children can itself have Optionals
+The default for this render condition is `has_children` that returns True
+if the element is a basic element (like `html.Text` or `html.HTML`) or
+if it is a non-empty list of children.
 """
+
 from kutty import html
 
 
+def is_base_element(element):
+    return (isinstance(element, html.Text) or
+            isinstance(element, html.HTML))
+
+def is_base_or_has_children(element):
+    return (is_base_element(element) or
+            (isinstance(element, html.Element) and bool(element.children)))
+
 class Optional(html.Element):
-    def __init__(self, e):
+    def __init__(self, e, render_condition=is_base_or_has_children):
         self.e = e
+        self.render_condition = render_condition
 
     def __getattr__(self, attr):
         # pass through
         return getattr(self.e, attr)
 
     def render(self):
-        if self.e.children:
+        if self.render_condition(self.e):
             return self.e.render()
         else:
             return ""
