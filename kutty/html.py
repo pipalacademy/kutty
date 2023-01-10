@@ -1,5 +1,6 @@
 """Base HTML elements.
 """
+from functools import partial
 from html import escape
 
 class Element:
@@ -167,3 +168,6 @@ class Document(Element):
 
     def render(self):
         return "<!DOCTYPE html>" + self.html.render()
+
+def new_element(constructor, *args, **kwargs):
+    return partial(constructor, *args, **kwargs)
