@@ -37,7 +37,7 @@ code: |
 html: |
   <div class="alert alert-dismissible fade show" role="alert">
     This is a dismissible alert.
-    <button type="button" class="close" data-dismiss="alert">
+    <button class="close" type="button" data-dismiss="alert">
       <span>&times;</span>
     </button>
   </div>
@@ -55,7 +55,7 @@ html: |
   <div class="alert alert-dismissible fade show" role="alert">
     <h4 class="alert-heading">Well done</h4>
     You have solved the assignment successfully.
-    <button type="button" class="close" data-dismiss="alert">
+    <button class="close" type="button" data-dismiss="alert">
       <span>&times;</span>
     </button>
   </div>
