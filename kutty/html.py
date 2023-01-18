@@ -20,7 +20,7 @@ class Element:
     def __lshift__(self, component):
         return self.add(component)
 
-    def add(self, component):
+    def add(self, *components):
         raise Exception(f"Adding child elements is not supported for {self.__class__.__name__}")
 
 class Text(Element):
@@ -76,13 +76,17 @@ class HTMLElement(Element):
     def __repr__(self):
         return f"<Tag:{self.TAG}>"
 
-    def add(self, content):
-        if not isinstance(content, Element):
-            content = Text(str(content))
-        self.children.append(content)
+    def add(self, *components):
+        for component in components:
+            self._add_one(component)
 
         # Result self to allow chaining of methods
         return self
+
+    def _add_one(self, content):
+        if not isinstance(content, Element):
+            content = Text(str(content))
+        self.children.append(content)
 
     def add_class(self, class_):
         classes = self.get_classes()

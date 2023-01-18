@@ -135,3 +135,24 @@ html: |
   <div class="text-light bg-dark bar">
     baz
   </div>
+---
+name: test adding children to an element
+code: |
+  li = lambda x: html.li(x, class_="list-group-item")
+  d = html.div(
+    html.ul(class_="list-group")
+      .add(
+        li("Foo"),
+        li("Bar"),
+        li("Baz"),
+      )
+  )
+  result = d.render()
+html: |
+  <div>
+    <ul class="list-group">
+      <li class="list-group-item">Foo</li>
+      <li class="list-group-item">Bar</li>
+      <li class="list-group-item">Baz</li>
+    </ul>
+  </div>
