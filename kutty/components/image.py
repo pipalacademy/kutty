@@ -11,5 +11,5 @@ print(img)
 
 from .. import html
 
-def Image(src, **kwargs):
-    return html.img(src, **kwargs)
+def Image(src, *args, **kwargs):
+    return html.img(*args, src=src, **kwargs)
