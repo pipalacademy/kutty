@@ -46,7 +46,7 @@ class Layout(html.Element):
         return self.render(page)
 
     def new_page(self, title):
-        return Page(layout=self, title=title)
+        return Page(title=title)
 
 class Page(html.Element):
     def __init__(self, title):

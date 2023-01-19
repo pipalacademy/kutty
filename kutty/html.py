@@ -1,5 +1,6 @@
 """Base HTML elements.
 """
+from functools import partial
 from html import escape
 
 class Element:
@@ -19,7 +20,7 @@ class Element:
     def __lshift__(self, component):
         return self.add(component)
 
-    def add(self, component):
+    def add(self, *components):
         raise Exception(f"Adding child elements is not supported for {self.__class__.__name__}")
 
 class Text(Element):
@@ -41,27 +42,60 @@ class HTMLElement(Element):
     """Base class for all plain html elements.
     """
     KIND = "normal"
+    CLASS = ""  # default classes
 
-    def __init__(self, _content=None, _tag=None, **attrs):
+    def __init__(self, _attrs_or_content=None, *contents, _tag=None, **attrs):
         self.children = []
-        self.attrs = attrs
-        if _content is not None:
-            self.add(_content)
+        self.attrs = {}
+
+        self.add_class(self.CLASS)
+
+        if self._is_attrs(_attrs_or_content):
+            # kwargs should have precedence over dict
+            attrs = {**_attrs_or_content, **attrs}
+        elif self._is_content(_attrs_or_content):
+            self.add(_attrs_or_content)
+
+        for child in contents:
+            self.add(child)
+
+        self.add_class(attrs.pop("class_", ""))
+        self.attrs.update(attrs)
 
         # special case to support arbitrary tags
         if _tag:
             self.TAG = _tag
 
+    def _is_attrs(self, attrs_or_content):
+        return isinstance(attrs_or_content, dict)
+
+    def _is_content(self, attrs_or_content):
+        return attrs_or_content is not None \
+                and not self._is_attrs(attrs_or_content)
+
     def __repr__(self):
         return f"<Tag:{self.TAG}>"
 
-    def add(self, content):
+    def add(self, *components):
+        for component in components:
+            self._add_one(component)
+
+        # Result self to allow chaining of methods
+        return self
+
+    def _add_one(self, content):
         if not isinstance(content, Element):
             content = Text(str(content))
         self.children.append(content)
 
-        # Result self to allow chaining of methods
+    def add_class(self, class_):
+        classes = self.get_classes()
+        if class_ and class_ not in classes:
+            self.attrs["class_"] = " ".join(classes + [class_])
         return self
+
+    def get_classes(self):
+        return self.attrs.get("class_", "").split()
 
     def render(self):
         attrs = "".join(" " + self._render_attr(name, value) for name, value in self.attrs.items())
@@ -112,6 +146,7 @@ h2 = make_element("h2")
 h3 = make_element("h3")
 h4 = make_element("h4")
 h5 = make_element("h5")
+h6 = make_element("h6")
 
 html = make_element("html")
 head = make_element("head")
@@ -137,3 +172,6 @@ class Document(Element):
 
     def render(self):
         return "<!DOCTYPE html>" + self.html.render()
+
+def new_element(constructor, *args, **kwargs):
+    return partial(constructor, *args, **kwargs)

@@ -1,0 +1,136 @@
+name: test card with title, subtitle, text as kwargs, and a link
+code: |
+  from kutty.bootstrap import Card
+
+  card = Card(
+      title="Foo", subtitle="More about foo", text="Foo is spam, ham and eggs."
+  )
+  card.body.add_link("Go somewhere", "#")
+
+  result = card.render()
+html: |
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">
+        Foo
+      </h5>
+      <h6 class="card-subtitle text-muted">
+        More about foo
+      </h6>
+      <p class="card-text">
+        Foo is spam, ham and eggs.
+      </p>
+      <a class="card-link" href="#">
+        Go somewhere
+      </a>
+    </div>
+  </div>
+---
+name: test card with title, subtitle, text from methods, and a link
+code: |
+  from kutty.bootstrap import Card
+
+  card = Card()
+  card.body.add_title("Foo")
+  card.body.add_subtitle("More about foo")
+  card.body.add_text("Foo is spam, ham and eggs.")
+  card.body.add_link("Go somewhere", "#")
+
+  result = card.render()
+html: |
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">
+        Foo
+      </h5>
+      <h6 class="card-subtitle text-muted">
+        More about foo
+      </h6>
+      <p class="card-text">
+        Foo is spam, ham and eggs.
+      </p>
+      <a class="card-link" href="#">
+        Go somewhere
+      </a>
+    </div>
+  </div>
+---
+name: test card with top image
+code: |
+  from kutty.bootstrap import Card
+
+  card = Card()
+  card.add_top_image("/foo.jpeg", alt="Foo picture")
+  card.add_body(title="Hello, world!")
+
+  result = card.render()
+html: |
+  <div class="card">
+    <img class="card-img-top" src="/foo.jpeg" alt="Foo picture" />
+    <div class="card-body">
+      <h5 class="card-title">Hello, world!</h5>
+    </div>
+  </div>
+--- 
+name: test card with top image with composed
+code: |
+  from kutty.bootstrap import Card
+  from kutty.bootstrap.card import CardImageTop, CardBody, CardTitle
+
+  card = Card(
+    CardImageTop("/foo.jpeg", alt="Foo picture"),
+    CardBody(
+      CardTitle("Hello, world!")
+    )
+  )
+
+  result = card.render()
+html: |
+  <div class="card">
+    <img class="card-img-top" src="/foo.jpeg" alt="Foo picture" />
+    <div class="card-body">
+      <h5 class="card-title">Hello, world!</h5>
+    </div>
+  </div>
+---
+name: test card with footer
+code: |
+  from kutty.bootstrap import Card
+
+  card = Card(text="Hello, world!", footer="Card footer")
+
+  result = card.render()
+html: |
+  <div class="card">
+    <div class="card-body">
+      <p class="card-text">Hello, world!</p>
+    </div>
+    <div class="card-footer">
+      Card footer
+    </div>
+  </div>
+---
+name: test card with list group
+code: |
+  from kutty import html as h
+  from kutty.bootstrap import Card
+
+  li = h.new_element(h.li, class_="list-group-item")
+
+  card = Card(
+    h.ul(
+      {"class": "list-group list-group-flush"},
+      li("An item"),
+      li("A second item"),
+      li("A third item"),
+    )
+  )
+  result = card.render()
+html: |
+  <div class="card">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">An item</li>
+      <li class="list-group-item">A second item</li>
+      <li class="list-group-item">A third item</li>
+    </ul>
+  </div>

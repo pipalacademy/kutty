@@ -1,0 +1,29 @@
+name: test optional
+code: |
+  from kutty import Optional
+
+  d = html.div(
+    Optional(html.p("foo")),
+    Optional(html.p()),
+    Optional(html.a(""))
+  )
+  result = d.render()
+html: |
+  <div>
+    <p>foo</p>
+    <a></a>
+  </div>
+---
+name: test optional when arg is None
+code: |
+  from kutty import Optional
+
+  d = html.div(
+    Optional(html.div(None)),
+    Optional(html.div("foo")),
+  )
+  result = d.render()
+html: |
+  <div>
+    <div>foo</div>
+  </div>
