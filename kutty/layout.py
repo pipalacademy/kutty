@@ -1,6 +1,7 @@
 from . import html
 from .components.navbar import Navbar
-
+import json
+from flask import make_response
 
 BOOTSTRAP_CSS = "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
 
@@ -60,3 +61,16 @@ class Page(html.Element):
 
     def render(self):
         return self.content.render()
+
+class RawPage:
+    def __init__(self, content, content_type):
+        self.content = content
+        self.content_type = content_type
+
+    def make_response(self):
+        headers = {"content-type": self.content_type}
+        return make_response(self.content, "200 OK", headers)
+
+class JSONPage(RawPage):
+    def __init__(self, data):
+        super().__init__(json.dumps(data), "application/json")
