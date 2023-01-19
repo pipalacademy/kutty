@@ -61,3 +61,6 @@ class Optional(html.Element):
             return self.e.render()
         else:
             return ""
+
+    def add(self, *args, **kwargs):
+        return self.e.add(*args, **kwargs)
