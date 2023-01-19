@@ -1,0 +1,202 @@
+name: test table with default styles and add_row with list
+code: |
+  from kutty.bootstrap import Table
+
+  table = Table(columns=["First name", "Last name", "Handle"])
+  table.add_row(["Foo", "Bar", "@baz"])
+  table.add_row(["Spam", "Ham", "@eggs"])
+
+  result = table.render()
+html: |
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Handle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Foo</td>
+        <td>Bar</td>
+        <td>@baz</td>
+      </tr>
+      <tr>
+        <td>Spam</td>
+        <td>Ham</td>
+        <td>@eggs</td>
+      </tr>
+    </tbody>
+  </table>
+---
+name: test table with default style and add_cell
+code: |
+  from kutty.bootstrap import Table
+
+  users = [["Foo", "Bar", "@baz"],
+           ["Spam", "Ham", "@eggs"]]
+
+  table = Table(columns=["First name", "Last name", "Handle"])
+  for user in users:
+      row = table.add_row()
+      row.add_cell(user[0])
+      row.add_cell(user[1])
+      row.add_cell(user[2])
+
+  result = table.render()
+html: |
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Handle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Foo</td>
+        <td>Bar</td>
+        <td>@baz</td>
+      </tr>
+      <tr>
+        <td>Spam</td>
+        <td>Ham</td>
+        <td>@eggs</td>
+      </tr>
+    </tbody>
+  </table>
+---
+name: test table with default style and advanced usage
+code: |
+  from kutty.bootstrap.table import (
+    Table, TableHead, TableBody, TableRow, TableCell
+  )
+
+  table = Table(
+      TableHead(
+          TableRow(
+              TableCell(
+                "First name", header=True, scope="col"
+              ),
+              TableCell(
+                "Last name", header=True, scope="col"
+              ),
+              TableCell(
+                "Handle", header=True, scope="col"
+              )
+          ),
+      ),
+      TableBody(
+          TableRow(
+              TableCell("Foo"), TableCell("Bar"), TableCell("@baz"),
+          ),
+          TableRow(
+              TableCell("Spam"), TableCell("Ham"), TableCell("@eggs")
+          )
+      )
+  )
+
+  result = table.render()
+html: |
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Handle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Foo</td>
+        <td>Bar</td>
+        <td>@baz</td>
+      </tr>
+      <tr>
+        <td>Spam</td>
+        <td>Ham</td>
+        <td>@eggs</td>
+      </tr>
+    </tbody>
+  </table>
+---
+name: test table with default style and table.head/table.body
+code: |
+  from kutty.bootstrap import Table
+
+  table = Table()
+  table.head.add_row(["First name", "Last name", "Handle"])
+  table.body.add_row(["Foo", "Bar", "@baz"])
+  table.body.add_row(["Spam", "Ham", "@eggs"])
+
+  result = table.render()
+html: |
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">Handle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Foo</td>
+        <td>Bar</td>
+        <td>@baz</td>
+      </tr>
+      <tr>
+        <td>Spam</td>
+        <td>Ham</td>
+        <td>@eggs</td>
+      </tr>
+    </tbody>
+  </table>
+---
+name: test empty table
+code: |
+  from kutty.bootstrap import Table
+
+  result = Table().render()
+html: |
+  <table class="table"></table>
+---
+name: test table with empty head
+code: |
+  from kutty.bootstrap import Table
+
+  table = Table()
+  table.body.add_row(["Foo", "Bar", "@baz"])
+
+  result = table.render()
+html: |
+  <table class="table">
+    <tbody>
+      <tr>
+        <td>Foo</td>
+        <td>Bar</td>
+        <td>@baz</td>
+      </tr>
+    </tbody>
+  </table>
+---
+name: test table with empty body
+code: |
+  from kutty.bootstrap import Table
+
+  table = Table()
+  table.head.add_row(["First", "Last", "Handle"])
+
+  result = table.render()
+html: |
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th scope="col">Handle</th>
+      </tr>
+    </thead>
+  </table>
