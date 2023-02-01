@@ -23,12 +23,18 @@ class Element:
     def add(self, *components):
         raise Exception(f"Adding child elements is not supported for {self.__class__.__name__}")
 
+    def is_empty(self):
+        return True
+
 class Text(Element):
     def __init__(self, text):
         self.text = text
 
     def render(self):
         return self.text
+
+    def is_empty(self):
+        return bool(self.text)
 
 class HTML(Element):
     """Raw HTML"""
@@ -37,6 +43,9 @@ class HTML(Element):
 
     def render(self):
         return self.html
+
+    def is_empty(self):
+        return bool(self.html)
 
 class HTMLElement(Element):
     """Base class for all plain html elements.
@@ -106,6 +115,9 @@ class HTMLElement(Element):
             return f"<{self.TAG}{attrs}>{content}</{self.TAG}>"
         else:
             return f"<{self.TAG}{attrs} />"
+
+    def is_empty(self):
+        return bool(self.children)
 
     def _render_attr(self, name, value):
         name = name.replace("_", "-").strip("-")

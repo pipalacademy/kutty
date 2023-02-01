@@ -31,9 +31,8 @@ Notice that there is only one child div element, which has some content.
 This is a function that takes the element and returns a boolean telling
 if the element should be rendered.
 
-The default for this render condition is `has_children` that returns True
-if the element is a basic element (like `html.Text` or `html.HTML`) or
-if it is a non-empty list of children.
+The default for this render condition is `is_element_empty` that
+returns the same value as the `element.is_empty()` method.
 """
 
 from kutty import html
@@ -43,12 +42,11 @@ def is_base_element(element):
     return (isinstance(element, html.Text) or
             isinstance(element, html.HTML))
 
-def is_base_or_has_children(element):
-    return (is_base_element(element) or
-            (isinstance(element, html.Element) and bool(element.children)))
+def is_element_empty(element):
+    return element.is_empty()
 
 class Optional(html.Element):
-    def __init__(self, e, render_condition=is_base_or_has_children):
+    def __init__(self, e, render_condition=is_element_empty):
         self.e = e
         self.render_condition = render_condition
 
@@ -64,3 +62,6 @@ class Optional(html.Element):
 
     def add(self, *args, **kwargs):
         return self.e.add(*args, **kwargs)
+
+    def is_empty(self):
+        return self.e.is_empty()
