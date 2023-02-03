@@ -169,6 +169,7 @@ title = make_element("title")
 script = make_element("script")
 
 input = make_element("input", kind="void")
+textarea = make_element("textarea")
 
 class Document(Element):
     def __init__(self):
