@@ -3,6 +3,8 @@ from kutty.components.navbar import Navbar
 
 
 BOOTSTRAP_CSS = "https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+JQUERY_JS = "https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+BOOTSTRAP_JS = "https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
 
 
 class Layout(html.Element):
@@ -13,6 +15,8 @@ class Layout(html.Element):
         self.javascripts = []
 
         self.add_stylesheet(BOOTSTRAP_CSS)
+        self.add_javascript(JQUERY_JS)
+        self.add_javascript(BOOTSTRAP_JS)
 
         self.navbar = Navbar(self.title)
 
