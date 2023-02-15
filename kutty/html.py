@@ -114,7 +114,7 @@ class HTMLElement(Element):
             content = "".join(c.render() for c in self.children)
             return f"<{self.TAG}{attrs}>{content}</{self.TAG}>"
         else:
-            return f"<{self.TAG}{attrs} />"
+            return f"<{self.TAG}{attrs}></{self.TAG}>"
 
     def is_empty(self):
         return bool(self.children)

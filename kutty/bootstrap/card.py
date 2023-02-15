@@ -238,6 +238,7 @@ class CardFooter(BootstrapElement):
 
 class ImageElement(BootstrapElement):
     TAG = "img"
+    KIND = "void"
 
     def __init__(self, src, *args, **kwargs):
         super().__init__(*args, src=src, **kwargs)

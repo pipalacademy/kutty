@@ -38,7 +38,7 @@ html: |
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
-    <body />
+    <body></body>
   </html>
 ---
 name: test << operator
@@ -156,3 +156,14 @@ html: |
       <li class="list-group-item">Baz</li>
     </ul>
   </div>
+---
+name: test create tag with html.tag
+code: |
+  result = html.tag(
+    "textarea",
+    "some text"
+  ).render()
+html: |
+  <textarea>
+    some text
+  </textarea>

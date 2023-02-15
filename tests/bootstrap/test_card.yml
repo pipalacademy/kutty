@@ -66,7 +66,7 @@ code: |
   result = card.render()
 html: |
   <div class="card">
-    <img class="card-img-top" src="/foo.jpeg" alt="Foo picture" />
+    <img class="card-img-top" src="/foo.jpeg" alt="Foo picture">
     <div class="card-body">
       <h5 class="card-title">Hello, world!</h5>
     </div>
@@ -87,7 +87,7 @@ code: |
   result = card.render()
 html: |
   <div class="card">
-    <img class="card-img-top" src="/foo.jpeg" alt="Foo picture" />
+    <img class="card-img-top" src="/foo.jpeg" alt="Foo picture">
     <div class="card-body">
       <h5 class="card-title">Hello, world!</h5>
     </div>
