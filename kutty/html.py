@@ -34,7 +34,7 @@ class Text(Element):
         return self.text
 
     def is_empty(self):
-        return bool(self.text)
+        return not bool(self.text)
 
 class HTML(Element):
     """Raw HTML"""
@@ -45,7 +45,7 @@ class HTML(Element):
         return self.html
 
     def is_empty(self):
-        return bool(self.html)
+        return not bool(self.html)
 
 class HTMLElement(Element):
     """Base class for all plain html elements.
@@ -117,7 +117,7 @@ class HTMLElement(Element):
             return f"<{self.TAG}{attrs}></{self.TAG}>"
 
     def is_empty(self):
-        return bool(self.children)
+        return not bool(self.children)
 
     def _render_attr(self, name, value):
         name = name.replace("_", "-").strip("-")
