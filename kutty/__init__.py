@@ -7,5 +7,6 @@ from .components.table import Table
 from .components.navbar import Navbar
 from .components.image import Image
 from .components.optional import Optional
+from .components.markdown import Markdown
 
 from flask import request
