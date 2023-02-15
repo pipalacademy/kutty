@@ -34,8 +34,8 @@ from kutty import html
 class Markdown(html.HTMLElement):
     TAG = "div"
 
-    def __init__(self, text=None, extensions=("fenced_code",)):
-        super().__init__()
+    def __init__(self, text=None, extensions=("fenced_code",), **kwargs):
+        super().__init__(**kwargs)
         self.extensions = extensions
         if text:
             self.add_markdown(text)
