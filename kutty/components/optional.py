@@ -64,4 +64,4 @@ class Optional(html.Element):
         return self.e.add(*args, **kwargs)
 
     def is_empty(self):
-        return self.e.is_empty()
+        return not self.render_condition(self.e)
