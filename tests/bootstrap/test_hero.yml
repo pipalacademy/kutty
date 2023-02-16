@@ -12,11 +12,15 @@ code: |
   result = hero.render()
 html: |
   <div class="jumbotron">
-    <div>
-      <h1 class="display-4">Hello, world!</h1>
-      <p class="lead">This is a simple hero unit</p>
-    <div>
-      <p>Hello world is a nice placeholder</p>
-      <a class="btn btn-primary btn-lg" href="/more">Learn More</a>
+    <div class="container">
+      <div>
+        <h1 class="display-4">Hello, world!</h1>
+        <p class="lead">This is a simple hero unit</p>
+      </div>
+      <hr class="my-4">
+      <div>
+        <p>Hello world is a nice placeholder</p>
+        <a class="btn btn-primary btn-lg" href="/more">Learn More</a>
+      </div>
     </div>
   </div>

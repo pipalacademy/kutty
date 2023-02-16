@@ -38,9 +38,12 @@ class Hero(BootstrapElement):
             render_condition=lambda _: (not self.header.is_empty() and
                                         not self.body.is_empty()))
 
-        self << self.header
-        self << separator
-        self << self.body
+        self.container = Optional(HeroContainer())
+        self.container << self.header
+        self.container << separator
+        self.container << self.body
+
+        self << self.container
 
         if title:
             self.add_title(title)
@@ -60,6 +63,17 @@ class Hero(BootstrapElement):
 
     def add_cta(self, *args, **kwargs):
         return self.body.add_cta(*args, **kwargs)
+
+
+class HeroContainer(BootstrapElement):
+    TAG = "div"
+    CLASS = "container"
+
+    def is_empty(self):
+        return all(c.is_empty()
+                   if isinstance(c, HeroHeader) or isinstance(c, HeroBody)
+                   else False
+                   for c in self.children)
 
 
 class HeroHeader(BootstrapElement):
