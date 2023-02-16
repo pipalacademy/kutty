@@ -35,10 +35,7 @@ class Layout(html.Element):
             doc.head.add(html.link(rel="stylesheet", href=link))
 
         doc.body.add(self.navbar)
-        container = html.div(class_="container")
-        doc.body.add(container)
-        if content:
-            container.add(content)
+        doc.body.add(content)
 
         for link in self.javascripts:
             doc.body.add(html.script(src=link))
@@ -52,9 +49,11 @@ class Layout(html.Element):
         return Page(title=title)
 
 class Page(html.Element):
-    def __init__(self, title):
+    def __init__(self, title, container=None):
         self.title = title
+        self.container = container or html.div(class_="container")
         self.content = html.div(class_="page")
+        self.container.add(self.content)
 
         if self.title:
             self.add(html.h1(title))
@@ -63,4 +62,4 @@ class Page(html.Element):
         self.content.add(element)
 
     def render(self):
-        return self.content.render()
+        return self.container.render()
