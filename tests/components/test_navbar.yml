@@ -6,14 +6,14 @@ code: |
   nav.add_link("baz", url="/baz", right=True)
   result = nav.render()
 html: |
-  <nav class="navbar navbar-expand-lg bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="/">FooBar</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-content">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbar-content">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link" href="/foo">foo</a>
           </li>
@@ -21,9 +21,11 @@ html: |
             <a class="nav-link" href="/bar">bar</a>
           </li>
         </ul>
-        <div class="d-flex">
-          <a class="nav-link" href="/baz">baz</a>
-        </div>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/baz">baz</a>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>

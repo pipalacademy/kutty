@@ -1,64 +1,59 @@
-from dataclasses import dataclass
-from typing import Any
-
 from .. import html
 
-@dataclass
-class NavEntry:
-    element: Any
-    url: str
-    right: bool
 
-class Navbar(html.Element):
+class Navbar(html.HTMLElement):
+    TAG = "nav"
+    CLASS = "navbar navbar-expand-lg navbar-light bg-light"
+
     def __init__(self, title):
-        self.title = title
-        self.entries = []
+        super().__init__()
+        self.container = html.div(class_="container")
+
+        self.branding = html.a(title, class_="navbar-brand", href="/")
+
+        self.left_entries = html.ul(class_="navbar-nav mr-auto")
+        self.right_entries = html.ul(class_="navbar-nav")
+
+        navbar_content_id = "navbar-content"
+        self.content = html.div(
+            class_="collapse navbar-collapse", id=navbar_content_id
+        ).add(
+            self.left_entries, self.right_entries,
+        )
+
+        self << self.container
+
+        self.container << self.branding
+        self.container << NavbarToggler(target=f"#{navbar_content_id}")
+        self.container << self.content
 
     def add_link(self, element, url, right=False):
-        entry = NavEntry(element=element, url=url, right=right)
-        self.entries.append(entry)
+        entry = NavEntry(element, url)
+        if right:
+            self.right_entries << entry
+        else:
+            self.left_entries << entry
+        return entry
 
-    def render_branding(self):
-        return html.a(self.title, class_="navbar-brand", href="/")
 
-    def render_hamburger(self, id):
-        return html.button(
-            html.span(class_="navbar-toggler-icon"),
-            class_="navbar-toggler",
-            type="button",
-            data_bs_toggle="collapse",
-            data_bs_target=f"#{id}",
-        )
+class NavEntry(html.HTMLElement):
+    TAG = "li"
+    CLASS = "nav-item"
 
-    def render_entries(self, id):
-        content = html.div(
-            class_="collapse navbar-collapse",
-            id=id,
-        )
+    def __init__(self, element, url):
+        super().__init__()
+        self << html.a(class_="nav-link", href=url).add(element)
 
-        left_entries = html.ul(class_="navbar-nav me-auto mb-2 mb-lg-0")
-        right_entries = html.div(class_="d-flex")
 
-        for entry in self.entries:
-            if not entry.right:
-                left_entries.add(
-                    html.li(self.render_link(entry), class_="nav-item")
-                )
-            else:
-                right_entries.add(self.render_link(entry))
+class NavbarToggler(html.HTMLElement):
+    TAG = "button"
+    CLASS = "navbar-toggler"
 
-        content.add(left_entries)
-        content.add(right_entries)
-        return content
-
-    def render_link(self, entry):
-        return html.a(entry.element, class_="nav-link", href=entry.url)
-
-    def render(self):
-        container = html.div(class_="container")
-        container.add(self.render_branding())
-        container.add(self.render_hamburger(id="navbar-content"))
-        container.add(self.render_entries(id="navbar-content"))
-
-        nav = html.nav(container, class_="navbar navbar-expand-lg bg-light")
-        return nav.render()
+    def __init__(self, *args, target, **kwargs):
+        super().__init__(
+                *args,
+                type="button",
+                data_toggle="collapse",
+                data_target=target,
+                **kwargs)
+        self << html.span(class_="navbar-toggler-icon")
