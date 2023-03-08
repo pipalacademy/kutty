@@ -8,5 +8,5 @@ setup(
     author="Pipal Academy",
     install_requires=["pygments", "markdown==3.4.1"],
     url="https://github.com/pipalacademy/kutty",
-    packages=["kutty"]
+    packages=find_packages()
 )
