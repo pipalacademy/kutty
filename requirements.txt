@@ -1,2 +1,2 @@
 pygments
-markdown>=3.4.3
+markdown>=3.3
