@@ -2,9 +2,9 @@ from kutty import html
 from kutty.components.navbar import Navbar
 
 
-BOOTSTRAP_CSS = "https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+BOOTSTRAP_CSS = "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
 JQUERY_JS = "https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-BOOTSTRAP_JS = "https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+BOOTSTRAP_JS = "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
 
 
 class Layout(html.Element):
