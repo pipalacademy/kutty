@@ -16,7 +16,8 @@ class Navbar(html.HTMLElement):
 
         navbar_content_id = "navbar-content"
         self.content = html.div(
-            class_="collapse navbar-collapse", id=navbar_content_id
+            class_="collapse navbar-collapse justify-content-between",
+            id=navbar_content_id
         ).add(
             self.left_entries, self.right_entries,
         )
