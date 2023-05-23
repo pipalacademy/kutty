@@ -54,7 +54,7 @@ class NavbarToggler(html.HTMLElement):
         super().__init__(
                 *args,
                 type="button",
-                data_toggle="collapse",
-                data_target=target,
+                data_bs_toggle="collapse",
+                data_bs_target=target,
                 **kwargs)
         self << html.span(class_="navbar-toggler-icon")
